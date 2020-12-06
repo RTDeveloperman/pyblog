@@ -1,2 +1,14 @@
+#windows Stuff
 .idea/
+
+
+
+# virtual Env
 venv/
+
+#Databases
+db.sqlite3
+
+
+#Migrations
+blog/migrations/
