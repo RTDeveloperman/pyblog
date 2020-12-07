@@ -15,8 +15,6 @@ class UserProfile(models.Model):
     user=models.OneToOneField(User, on_delete=models.CASCADE)
     avatar=models.FileField(upload_to='files/user_avatar/', null=True, blank=True,validators=[validate_file_extension])
     description=models.CharField(max_length=512, null=False, blank=False)
-    def __str__(self):
-        return self.user.first_name+" "+self.user.last_name
 
 class Article(models.Model):
     title=models.CharField(max_length=124,null=False, blank= False)
@@ -25,11 +23,11 @@ class Article(models.Model):
     created_at=models.DateTimeField(default=datetime.now(),blank=False)
     category=models.ForeignKey('Category',on_delete=models.CASCADE)#Category dakhel single cotaion hast chon class category paeen tar tarif shode
     author=models.OneToOneField(UserProfile,on_delete=models.CASCADE)# agar mikhaym nevisande pak shod maghalatesh pak nashe on delete ro bayad hazf kard
-    def __str__(self):
-        return self.title
+    #def __str__(self):
+    #   return self.title
 class Category(models.Model):
     title=models.CharField(max_length=128,null=False, blank= False)
     cover=models.FileField(upload_to='files/category_Cover/',null=False, blank=False,validators=[validate_file_extension])
-    def __str__(self):
-        return self.title
+    #def __str__(self):
+    #    return self.title
 
