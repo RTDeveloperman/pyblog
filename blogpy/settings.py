@@ -125,9 +125,12 @@ USE_TZ = True
 
 #ckeditor setting
 #static Files
-STATIC_ROOT= os.path.dirname(os.path.abspath(__file__))#abspath ==>az shakheye root hesab mikone
-STATIC_URL = '/static/'
-
+#STATIC_ROOT= os.path.dirname(os.path.abspath(__file__))#abspath ==>az shakheye root hesab mikone
+STATIC_ROOT = os.path.join(BASE_DIR , 'staticfiles') #zamani estefade mishe ke az dastor collectstatic estefade mikonim
+STATIC_URL = '/static/' #url hayi ke ba static shoro mishan niyaz be mohtavaye static az ghabil CSS va .. darand
+STATICFILES_DIRS = ( #motaghayeri ke mige tamam fil haye static ma toye posheyi be che esmi gharar darand
+    os.path.join(BASE_DIR ,'static'),
+)
 #CKeditor Path
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
 CKEDITOR_UPLOAD_PATH = "uploads/"

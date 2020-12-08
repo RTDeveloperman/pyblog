@@ -16,3 +16,8 @@ blog/migrations/
 
 # Static Files
 files/
+
+
+
+#Deleted
+static(after collectstatic can Delete)/
