@@ -23,6 +23,7 @@ class Article(models.Model):
     created_at=models.DateTimeField(default=datetime.now(),blank=False)
     category=models.ForeignKey('Category',on_delete=models.CASCADE)#Category dakhel single cotaion hast chon class category paeen tar tarif shode
     author=models.ForeignKey(UserProfile,on_delete=models.CASCADE)# agar mikhaym nevisande pak shod maghalatesh pak nashe on delete ro bayad hazf kard
+    promote=models.BooleanField(default=False)
     def __str__(self):
        return self.title
 class Category(models.Model):
