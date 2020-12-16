@@ -7,7 +7,7 @@ def validate_file_extension(value):
     import  os
     from django.core.exceptions import ValidationError
     ext=os.path.splitext(value.name)[1]
-    valid_extention=['.jpg','.png']
+    valid_extention=['.jpg','.png','.jpeg']
     if not ext.lower() in valid_extention:
         raise ValidationError('Unsupported File Extension')
 
