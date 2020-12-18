@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.template.defaultfilters import title
 from django.views.generic import TemplateView
+from rest_framework.generics import UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import  status
@@ -73,3 +74,82 @@ class SingleArticleAPIView(APIView):
             return Response({'data':data},status=status.HTTP_200_OK)
         except:
             return Response({'status' : 'Internal Server Error'},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SearchArticlePIView(APIView):
+    def get(self,request,format=None):
+        try:
+            from django.db.models import Q#baraye anjame query haye pishrafte
+            query=request.GET['query']
+            article= Article.objects.filter(Q(content__icontains=query))
+            data=[]
+            serializerdata=serializers.SearchArticleSerializers(article,many=True)
+            data=serializerdata.data
+            return Response({'data':data},status=status.HTTP_200_OK)
+        except:
+            return Response({'data':'Internal server Error!:('},status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class SubmitArticlePIView (APIView):
+    def post(self,request,format=None):
+        try:
+            serializer=serializers.SubmitArticleSerializers(data=request.data)
+            if serializer.is_valid():
+                title=serializer.data.get('title')
+                cover= request.FILES['cover']
+                content= serializer.data.get('content')
+                category_id=serializer.data.get('category_id')
+                author_id= serializer.data.get('author_id')
+                promote= serializer.data.get('promote')
+            else:
+                return Response({'Statuse':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
+
+            user=User.objects.get(id=author_id)
+            author=UserProfile.objects.get(user=user)
+            category=Category.objects.get(id=category_id)
+
+            article=Article()
+            article.title=title
+            article.cover=cover
+            article.content=content
+            article.author=author
+            article.category=category
+            article.promote=promote
+            article.save()
+            return Response({'status':'O.K'},status=status.HTTP_200_OK)
+        except:
+            return Response({'data': 'Internal server Error!:`('}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class UpdateArticlePIView(UpdateAPIView):
+    def post(self,request,format=None):
+        try:
+            serializer=serializers.UpdateCoverArticleSerializer(data=request.data)
+            if serializer.is_valid():
+                article_id=serializer.data.get('article_id')
+                cover= request.FILES['cover']
+                Article.objects.filter(id=article_id).update(cover=cover)
+                return Response({'data': 'Update O.k .'}, status=status.HTTP_200_OK)
+
+
+            else:
+                return Response({'data': 'Bad Requiest!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            return Response({'data': 'Internal server Error!:`('}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class DeleteArticlePIView (APIView):
+    def post(self,request,format=None):
+        try:
+            serializer=serializers.DeleteArticleSerializer(data=request.data)
+            if serializer.is_valid():
+                article_id=serializer.data.get('article_id')
+                Article.objects.filter(id=article_id).delete()
+                return Response({'data': 'O.k'}, status=status.HTTP_200_OK)
+
+            else:
+                return Response({'data': 'Bad Requiest!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        except:
+            return Response({'data': 'Internal server Error!:`('}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
